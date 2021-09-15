@@ -20,7 +20,7 @@ import me.dartanman.crates.events.InventoryListener;
 import me.dartanman.crates.events.JoinListener;
 
 /**
- * SeniorCrates - Main Class for the plugin.
+ * Crates - Main Class for the plugin.
  * @author Austin Dart (Dartanman)
  */
 public class Crates extends JavaPlugin{
