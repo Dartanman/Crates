@@ -15,7 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.dartanman.crates.commands.CrateCmd;
+import me.dartanman.crates.commands.CrateCommand;
 import me.dartanman.crates.crates.CrateManager;
 import me.dartanman.crates.database.DatabaseAndPlayerDataManager;
 import me.dartanman.crates.database.MySQLAndPlayerDataManager;
@@ -51,7 +51,7 @@ public class Crates extends JavaPlugin{
 				databaseManager = new MySQLAndPlayerDataManager(this);
 				if(databaseManager.createCratesTable(mySQLInfo.getConnection())) {
 					crateManager = new CrateManager(this);
-					getCommand("crate").setExecutor(new CrateCmd(this));
+					getCommand("crate").setExecutor(new CrateCommand(this));
 					getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
 					getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 					getServer().getPluginManager().registerEvents(new InteractionListener(this), this);	

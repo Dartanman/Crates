@@ -20,7 +20,7 @@ import me.dartanman.crates.crates.CrateManager;
  * 
  * @author Austin Dart (Dartanman)
  */
-public class CrateCmd implements CommandExecutor {
+public class CrateCommand implements CommandExecutor {
 
 	private Crates plugin;
 
@@ -29,7 +29,7 @@ public class CrateCmd implements CommandExecutor {
 	 * 
 	 * @param pl Main class
 	 */
-	public CrateCmd(Crates pl) {
+	public CrateCommand(Crates pl) {
 		plugin = pl;
 	}
 
@@ -140,6 +140,9 @@ public class CrateCmd implements CommandExecutor {
 					player.openInventory(confirmationInv);
 					return true;
 				}
+			}else {
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Messages.IncorrectArgs")));
+				return true;
 			}
 		} else if (args.length == 4) {
 			if (args[0].equalsIgnoreCase("give")) {
@@ -172,9 +175,14 @@ public class CrateCmd implements CommandExecutor {
 				}
 				plugin.getCrateManager().giveCrate(target, crateName, amount);
 				return true;
+			}else {
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Messages.IncorrectArgs")));
+				return true;
 			}
+		}else {
+			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Messages.IncorrectArgs")));
+			return true;
 		}
-		return false;
 	}
 
 }

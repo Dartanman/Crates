@@ -24,6 +24,7 @@ Messages:
   ConfirmOrCancel: '&cPlease choose either &aconfirm &cor &4cancel&c.'
   AlreadyAdded: '&cYou already added that item. Consider editing it instead?'
   GivePercent: '&aPlease choose a percentage of likelihood for that item to be received from the crate.'
+  IncorrectArgs: '&cIncorrect args! Try &a/crate <create/edit/delete> <crate>&c or &a/crate give <player> <crate> <amount>&c!'
 Settings:
   MaxCratesPerPlayerPerDay: 3
   CrateOpenCooldownSeconds: 10
