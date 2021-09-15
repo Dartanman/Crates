@@ -76,7 +76,9 @@ public class Crates extends JavaPlugin{
 	public void onDisable() {
 		if(mySQLInfo != null) {
 			try {
-				mySQLInfo.getConnection().close();
+				if(mySQLInfo.getConnection() != null) {
+					mySQLInfo.getConnection().close();	
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
