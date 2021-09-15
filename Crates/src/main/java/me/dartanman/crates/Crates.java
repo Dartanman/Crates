@@ -67,6 +67,18 @@ public class Crates extends JavaPlugin{
 		}else if(dataStorageChoice.equalsIgnoreCase("yaml")){
 			createFiles();
 			mySQLInfo = new MySQLInfo(null, "username", "password");
+			crateManager = new CrateManager(this);
+			databaseManager = new MySQLAndPlayerDataManager(this);
+			if(databaseManager.createCratesTable(mySQLInfo.getConnection())) {
+				getCommand("crate").setExecutor(new CrateCommand(this));
+				getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
+				getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+				getServer().getPluginManager().registerEvents(new InteractionListener(this), this);	
+				getServer().getPluginManager().registerEvents(new JoinListener(this), this);	
+				databaseManager.attemptBeginNextDay();	
+			}else {
+				getLogger().severe("There was a problem loading Crates!");
+			}
 		}
 	}
 	
