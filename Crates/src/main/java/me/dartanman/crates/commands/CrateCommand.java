@@ -62,7 +62,7 @@ public class CrateCommand implements CommandExecutor {
 								plugin.getConfig().getString("Messages.NeedItem")));
 						return true;
 					}
-					CrateInfo crateInfo = new CrateInfo(crateName, 1, 1, player.getItemInHand());
+					CrateInfo crateInfo = new CrateInfo(crateName, 1, 1, player.getItemInHand().clone());
 					CrateInfo.createCrateMap.put(player, crateInfo);
 					Inventory confirmationInv = Bukkit.createInventory(null, 27, ChatColor.GREEN + "Create Crate: "
 							+ ChatColor.BOLD + crateName + ChatColor.RESET + "" + ChatColor.GREEN + "?");
