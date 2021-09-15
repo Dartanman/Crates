@@ -73,16 +73,16 @@ public abstract class DatabaseAndPlayerDataManager {
 	
 	public abstract boolean createCratesTable(Connection connection);
 	
-	public abstract boolean addPlayerToDatabase(Connection connection, UUID playerUUID);
+	public abstract void addPlayerToDatabase(Connection connection, UUID playerUUID);
 	
 	public abstract int getCratesToday(Connection connection, UUID playerUUID);
 	
 	public abstract long getLastOpenTime(Connection connection, UUID playerUUID);
 	
-	public abstract boolean setCratesToday(Connection connection, int cratesToday, UUID playerUUID);
+	public abstract void setCratesToday(Connection connection, int cratesToday, UUID playerUUID);
 	
-	public abstract boolean setLastOpenTime(Connection connection, long lastOpenTime, UUID playerUUID);
+	public abstract void setLastOpenTime(Connection connection, long lastOpenTime, UUID playerUUID);
 	
-	public abstract boolean resetCratesToday(Connection connection);
+	public abstract void resetCratesToday(Connection connection);
 
 }

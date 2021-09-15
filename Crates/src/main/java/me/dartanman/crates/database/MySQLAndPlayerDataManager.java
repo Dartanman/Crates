@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.dartanman.crates.Crates;
 
@@ -62,36 +65,38 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 	 	*   The MySQL Connection to use
 	 	* @param playerUUID
 	 	*   The player's UUID
-	 	* @return
-	 	*   True if successful, false if there is an error
 	 	*/
 		@Override
-		public boolean addPlayerToDatabase(Connection connection, UUID playerUUID) {
-			try {
-				String uuidStr = playerUUID.toString();
-				
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT CratesOpenedToday FROM crates WHERE PlayerUUID='" + uuidStr + "';");
-				ResultSet result = preparedStatement.executeQuery();
-				
-				boolean found = false;
-				
-				if(result != null) {
-					while(result.next()) {
-						found = true;
+		public void addPlayerToDatabase(Connection connection, UUID playerUUID) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						String uuidStr = playerUUID.toString();
+						
+						PreparedStatement preparedStatement = connection.prepareStatement("SELECT CratesOpenedToday FROM crates WHERE PlayerUUID='" + uuidStr + "';");
+						ResultSet result = preparedStatement.executeQuery();
+						
+						boolean found = false;
+						
+						if(result != null) {
+							while(result.next()) {
+								found = true;
+							}
+						}
+						
+						if(!found) {
+							PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO crates VALUES ('" + uuidStr + "', '0', '0')");
+							preparedStatement2.executeUpdate();
+							preparedStatement2.close();
+						}
+						preparedStatement.close();
+					} catch (SQLException e) {
+						Bukkit.getLogger().severe("Issue adding a player to database. Is your MySQL Server running properly?");
 					}
 				}
-				
-				if(!found) {
-					PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO crates VALUES ('" + uuidStr + "', '0', '0')");
-					preparedStatement2.executeUpdate();
-					preparedStatement2.close();
-				}
-				preparedStatement.close();
-				return true;
-			} catch (SQLException e) {
-				Bukkit.getLogger().severe("Issue adding a player to database. Is your MySQL Server running properly?");
-				return false;
-			}
+		         
+		       }.runTaskAsynchronously(plugin);
 		}
 		
 		/**
@@ -186,22 +191,24 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 		 *   The amount of crates opened
 		 * @param playerUUID
 		 *   The player's UUID
-		 * @return
-		 *   True if successful, false if there is an error
 		 */
 		@Override
-		public boolean setCratesToday(Connection connection, int cratesToday, UUID playerUUID) {
-			try {
-				String uuidStr = playerUUID.toString();
-				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET CratesOpenedToday=" + cratesToday + " WHERE PlayerUUID='" + uuidStr + "'");
-				preparedStatement.executeUpdate();
-				preparedStatement.close();
-				return true;
-			} catch (SQLException e) {
-				Bukkit.getLogger().severe("Failed to set Crates Opened Today. Is your MySQL Server running properly?");
-				return false;
-			}
+		public void setCratesToday(Connection connection, int cratesToday, UUID playerUUID) {
 			
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						String uuidStr = playerUUID.toString();
+						PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET CratesOpenedToday=" + cratesToday + " WHERE PlayerUUID='" + uuidStr + "'");
+						preparedStatement.executeUpdate();
+						preparedStatement.close();
+					} catch (SQLException e) {
+						Bukkit.getLogger().severe("Failed to set Crates Opened Today. Is your MySQL Server running properly?");
+					}
+				}
+		         
+		       }.runTaskAsynchronously(plugin);
 		}
 		
 		/**
@@ -212,21 +219,24 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 		 *   The time to set
 		 * @param playerUUID
 		 *   The player's UUID
-		 * @return
-		 *   True if successful, false if there is an error
 		 */
 		@Override
-		public boolean setLastOpenTime(Connection connection, long openTimeMillis, UUID playerUUID) {
-			try {
-				String uuidStr = playerUUID.toString();
-				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET LastOpenTime='" + openTimeMillis + "' WHERE PlayerUUID='" + uuidStr + "'");
-				preparedStatement.executeUpdate();
-				preparedStatement.close();
-				return true;
-			} catch (SQLException e) {
-				Bukkit.getLogger().severe("Failed to set Crates Opened Today. Is your MySQL Server running properly?");
-				return false;
-			}
+		public void setLastOpenTime(Connection connection, long openTimeMillis, UUID playerUUID) {
+			
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						String uuidStr = playerUUID.toString();
+						PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET LastOpenTime='" + openTimeMillis + "' WHERE PlayerUUID='" + uuidStr + "'");
+						preparedStatement.executeUpdate();
+						preparedStatement.close();
+					} catch (SQLException e) {
+						Bukkit.getLogger().severe("Failed to set Crates Opened Today. Is your MySQL Server running properly?");
+					}
+				}
+		         
+		       }.runTaskAsynchronously(plugin);
 			
 		}
 		
@@ -234,20 +244,24 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 		 * Resets today's crates to 0 for everyone.
 		 * @param connection
 		 *   The MySQL Connection to use
-		 * @return
-		 *   True if successful, false if there is an error
 		 */
 		@Override
-		public boolean resetCratesToday(Connection connection) {
-			try {
-				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET CratesOpenedToday='0'");
-				preparedStatement.executeUpdate();
-				preparedStatement.close();
-				return true;
-			} catch (SQLException e) {
-				Bukkit.getLogger().severe("Failed to reset Crates Opened Today. Is your MySQL Server running properly?");
-				return false;
-			}
+		public void resetCratesToday(Connection connection) {
+			
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET CratesOpenedToday='0'");
+						preparedStatement.executeUpdate();
+						preparedStatement.close();
+					} catch (SQLException e) {
+						Bukkit.getLogger().severe("Failed to reset Crates Opened Today. Is your MySQL Server running properly?");
+					}
+				}
+		         
+		       }.runTaskAsynchronously(plugin);
+			
 		}
 
 }

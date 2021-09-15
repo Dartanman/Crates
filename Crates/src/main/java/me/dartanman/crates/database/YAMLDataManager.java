@@ -43,7 +43,7 @@ public class YAMLDataManager extends DatabaseAndPlayerDataManager{
 	 * Add a player to the "database" which is a ConfigurationSection
 	 */
 	@Override
-	public boolean addPlayerToDatabase(Connection connection, UUID playerUUID) {
+	public void addPlayerToDatabase(Connection connection, UUID playerUUID) {
 		String uuidStr = playerUUID.toString();
 		Set<String> players = pFile.getConfigurationSection("Players").getKeys(false);
 		if(!players.contains(uuidStr)) {
@@ -51,7 +51,6 @@ public class YAMLDataManager extends DatabaseAndPlayerDataManager{
 			pFile.set("Players." + uuidStr + ".LastOpenTime", 0);
 		}
 		plugin.savePlayerDataFile();
-		return true;
 	}
 
 	/**
@@ -86,34 +85,31 @@ public class YAMLDataManager extends DatabaseAndPlayerDataManager{
 	 * Set the amount of crates opened by a specific player today
 	 */
 	@Override
-	public boolean setCratesToday(Connection connection, int cratesToday, UUID playerUUID) {
+	public void setCratesToday(Connection connection, int cratesToday, UUID playerUUID) {
 		String uuidStr = playerUUID.toString();
 		pFile.set("Players." + uuidStr + ".CratesOpenedToday", cratesToday);
 		plugin.savePlayerDataFile();
-		return true;
 	}
 
 	/**
 	 * Set the last time the player opened a crate
 	 */
 	@Override
-	public boolean setLastOpenTime(Connection connection, long lastOpenTime, UUID playerUUID) {
+	public void setLastOpenTime(Connection connection, long lastOpenTime, UUID playerUUID) {
 		String uuidStr = playerUUID.toString();
 		pFile.set("Players." + uuidStr + ".LastOpenTime", lastOpenTime);
 		plugin.savePlayerDataFile();
-		return true;
 	}
 
 	/**
 	 * Reset the amount of crates opened today to 0 for all players
 	 */
 	@Override
-	public boolean resetCratesToday(Connection connection) {
+	public void resetCratesToday(Connection connection) {
 		for(String uuidStrings : pFile.getConfigurationSection("Players").getKeys(false)) {
 			pFile.set("Players." + uuidStrings + ".CratesOpenedToday", 0);
 		}
 		plugin.savePlayerDataFile();
-		return false;
 	}
 
 }
