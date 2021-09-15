@@ -6,4 +6,4 @@ commands:
    crate:
      description: Crates base command
      usage: /<command>
-     aliases: [crates, dartcrates]
+     aliases: [crates, dartcrates, dartcrate]
