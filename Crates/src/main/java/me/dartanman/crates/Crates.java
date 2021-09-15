@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,6 +21,7 @@ import me.dartanman.crates.crates.CrateManager;
 import me.dartanman.crates.database.DatabaseAndPlayerDataManager;
 import me.dartanman.crates.database.MySQLAndPlayerDataManager;
 import me.dartanman.crates.database.MySQLInfo;
+import me.dartanman.crates.database.YAMLDataManager;
 import me.dartanman.crates.events.ChatListener;
 import me.dartanman.crates.events.InteractionListener;
 import me.dartanman.crates.events.InventoryListener;
@@ -68,7 +70,7 @@ public class Crates extends JavaPlugin{
 			createFiles();
 			mySQLInfo = new MySQLInfo(null, "username", "password");
 			crateManager = new CrateManager(this);
-			databaseManager = new MySQLAndPlayerDataManager(this);
+			databaseManager = new YAMLDataManager(this);
 			if(databaseManager.createCratesTable(mySQLInfo.getConnection())) {
 				getCommand("crate").setExecutor(new CrateCommand(this));
 				getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
