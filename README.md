@@ -1,5 +1,5 @@
 # Crates
-Crates plugin.
+Crates plugin. Never released on SpigotMC.org due to the requirement of a MySQL server. Might add flatfile support in the future, and then release on Spigot.
 
 Requirements:
   - Java 8 or higher
