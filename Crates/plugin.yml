@@ -1,7 +1,7 @@
 name: Crates
 version: 1.0.0
 author: Dartanman
-main: main.dartanman.crates.Crates
+main: me.dartanman.crates.Crates
 commands:
    crate:
      description: Crates base command
