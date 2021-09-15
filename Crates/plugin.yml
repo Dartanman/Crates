@@ -1,0 +1,9 @@
+name: Crates
+version: 1.0.0
+author: Dartanman
+main: main.dartanman.crates.Crates
+commands:
+   crate:
+     description: SeniorCrates base command
+     usage: /<command>
+     aliases: [crates, seniorcrates, seniorcrate]

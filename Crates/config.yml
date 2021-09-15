@@ -1,0 +1,29 @@
+MySQL:
+  Address: 'localhost'
+  Port: '3306'
+  Database: 'schema'
+  Username: 'admin'
+  Password: 'password'
+Today: 0/0
+Messages:
+  CrateAlreadyExists: '&cA crate by that name already exists!'
+  NoPermission: '&cInsufficient permissions.'
+  ItemReceived: '&aYou received &6%item_name% &awhich had a &6%item_chance%% &achance of being gotten!'
+  MustBePlayer: '&cYou must be a Player to do that!'
+  NeedItem: '&cYou need to have an item in your hand to make a crate! (I recommend using a custom item)'
+  CrateDoesNotExist: '&cThat crate does not exist!'
+  PlayerNotOnline: '&cThat player is not online!'
+  InvalidInput: '&cThat was an invalid input!'
+  InvalidInputPercent: '&cThat was an invalid input! Defaulting to 0.0%'
+  CannotOpenCrate: '&cYou cannot open another crate yet. You may have reached the daily limit, or you are on cooldown!'
+  CrateCreated: '&aCrate created successfully. Make sure to edit it! Remember, Crate names are &lCaSe-SeNsItIvE!'
+  CrateDeleted: '&aCreate deleted successfully.'
+  CrateCreationCancelled: '&cCrate creation cancelled.'
+  CrateDeletionCancelled: '&cCrate deletion cancelled.'
+  ConfirmOrCancel: '&cPlease choose either &aconfirm &cor &4cancel&c.'
+  AlreadyAdded: '&cYou already added that item. Consider editing it instead?'
+  GivePercent: '&aPlease choose a percentage of likelihood for that item to be received from the crate.'
+Settings:
+  MaxCratesPerPlayerPerDay: 3
+  CrateOpenCooldownSeconds: 10
+Crates:
