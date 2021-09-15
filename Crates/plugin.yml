@@ -4,6 +4,6 @@ author: Dartanman
 main: main.dartanman.crates.Crates
 commands:
    crate:
-     description: SeniorCrates base command
+     description: Crates base command
      usage: /<command>
      aliases: [crates, seniorcrates, seniorcrate]
