@@ -38,7 +38,7 @@ public class Crates extends JavaPlugin{
 		if(connectToMySQL()) {
 			getLogger().info("Successfully connected to MySQL Server.");
 			mySQLManager = new MySQLAndPlayerDataManager(this);
-			if(mySQLManager.createSeniorCratesTable(mySQLInfo.getConnection())) {
+			if(mySQLManager.createCratesTable(mySQLInfo.getConnection())) {
 				crateManager = new CrateManager(this);
 				getCommand("crate").setExecutor(new CrateCmd(this));
 				getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
@@ -47,11 +47,11 @@ public class Crates extends JavaPlugin{
 				getServer().getPluginManager().registerEvents(new JoinListener(this), this);	
 				mySQLManager.attemptBeginNextDay();
 			}else {
-				getLogger().severe("Failed to create SeniorCrates table in MySQL server! SeniorCrates will not work!");
+				getLogger().severe("Failed to create Crates table in MySQL server! Crates will not work!");
 			}
 		}else {
 			getLogger().severe("SQL Authentication Failed!");
-			getLogger().severe("SeniorCrates will not work without a MySQL connection. Please make sure your settings are correct in config.yml");
+			getLogger().severe("Crates will not work without a MySQL connection. Please make sure your settings are correct in config.yml");
 		}
 	}
 	

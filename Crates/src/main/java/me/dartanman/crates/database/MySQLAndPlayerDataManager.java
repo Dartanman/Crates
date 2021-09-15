@@ -77,16 +77,16 @@ public class MySQLAndPlayerDataManager {
 	}
 	
 	/**
-	 * Creates the table in the MySQL server used for SeniorCrates
+	 * Creates the table in the MySQL server used for Crates
 	 * @param connection
 	 *   The MySQL Connection to use
 	 * @return
 	 *   True if successful, false if there is an error
 	 */
-	public boolean createSeniorCratesTable(Connection connection) {
+	public boolean createCratesTable(Connection connection) {
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(
-					"CREATE TABLE IF NOT EXISTS seniorcrates ("
+					"CREATE TABLE IF NOT EXISTS crates ("
 					+ "PlayerUUID VARCHAR(37) NOT NULL, "
 					+ "CratesOpenedToday INT NOT NULL, "
 					+ "LastOpenTime BIGINT NOT NULL, "
@@ -115,7 +115,7 @@ public class MySQLAndPlayerDataManager {
 			try {
 				String uuidStr = playerUUID.toString();
 				
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT CratesOpenedToday FROM seniorcrates WHERE PlayerUUID='" + uuidStr + "';");
+				PreparedStatement preparedStatement = connection.prepareStatement("SELECT CratesOpenedToday FROM crates WHERE PlayerUUID='" + uuidStr + "';");
 				ResultSet result = preparedStatement.executeQuery();
 				
 				boolean found = false;
@@ -127,7 +127,7 @@ public class MySQLAndPlayerDataManager {
 				}
 				
 				if(!found) {
-					PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO seniorcrates VALUES ('" + uuidStr + "', '0', '0')");
+					PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO crates VALUES ('" + uuidStr + "', '0', '0')");
 					preparedStatement2.executeUpdate();
 					preparedStatement2.close();
 				}
@@ -151,7 +151,7 @@ public class MySQLAndPlayerDataManager {
 		public int getCratesToday(Connection connection, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT CratesOpenedToday FROM seniorcrates WHERE PlayerUUID='" + uuidStr + "';");
+				PreparedStatement preparedStatement = connection.prepareStatement("SELECT CratesOpenedToday FROM crates WHERE PlayerUUID='" + uuidStr + "';");
 				ResultSet result = preparedStatement.executeQuery();
 				
 				int resultsCount = 0;
@@ -192,7 +192,7 @@ public class MySQLAndPlayerDataManager {
 		public long getLastOpenTime(Connection connection, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT LastOpenTime FROM seniorcrates WHERE PlayerUUID='" + uuidStr + "';");
+				PreparedStatement preparedStatement = connection.prepareStatement("SELECT LastOpenTime FROM crates WHERE PlayerUUID='" + uuidStr + "';");
 				ResultSet result = preparedStatement.executeQuery();
 				
 				int resultsCount = 0;
@@ -235,7 +235,7 @@ public class MySQLAndPlayerDataManager {
 		public boolean setCratesToday(Connection connection, int cratesToday, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
-				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE seniorcrates SET CratesOpenedToday=" + cratesToday + " WHERE PlayerUUID='" + uuidStr + "'");
+				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET CratesOpenedToday=" + cratesToday + " WHERE PlayerUUID='" + uuidStr + "'");
 				preparedStatement.executeUpdate();
 				preparedStatement.close();
 				return true;
@@ -260,7 +260,7 @@ public class MySQLAndPlayerDataManager {
 		public boolean setLastOpenTime(Connection connection, long openTimeMillis, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
-				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE seniorcrates SET LastOpenTime='" + openTimeMillis + "' WHERE PlayerUUID='" + uuidStr + "'");
+				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET LastOpenTime='" + openTimeMillis + "' WHERE PlayerUUID='" + uuidStr + "'");
 				preparedStatement.executeUpdate();
 				preparedStatement.close();
 				return true;
@@ -280,7 +280,7 @@ public class MySQLAndPlayerDataManager {
 		 */
 		public boolean resetCratesToday(Connection connection) {
 			try {
-				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE seniorcrates SET CratesOpenedToday='0'");
+				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET CratesOpenedToday='0'");
 				preparedStatement.executeUpdate();
 				preparedStatement.close();
 				return true;
