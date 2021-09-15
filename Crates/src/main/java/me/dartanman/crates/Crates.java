@@ -40,10 +40,13 @@ public class Crates extends JavaPlugin{
 	private CrateManager crateManager;
 	private DatabaseAndPlayerDataManager databaseManager;
 	
+	private static Crates instance;
+	
 	/**
 	 * Stuff to run when plugin is enabled by the server.
 	 */
 	public void onEnable() {
+		instance = this;
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		String dataStorageChoice = getConfig().getString("DataStorage");
@@ -82,6 +85,10 @@ public class Crates extends JavaPlugin{
 				getLogger().severe("There was a problem loading Crates!");
 			}
 		}
+	}
+	
+	public static Crates getInstance() {
+		return instance;
 	}
 	
 	/**

@@ -96,7 +96,7 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 					}
 				}
 		         
-		       }.runTaskAsynchronously(plugin);
+		       }.runTaskAsynchronously(Crates.getInstance());
 		}
 		
 		/**
@@ -208,7 +208,7 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 					}
 				}
 		         
-		       }.runTaskAsynchronously(plugin);
+		       }.runTaskAsynchronously(Crates.getInstance());
 		}
 		
 		/**
@@ -236,7 +236,7 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 					}
 				}
 		         
-		       }.runTaskAsynchronously(plugin);
+		       }.runTaskAsynchronously(Crates.getInstance());
 			
 		}
 		
@@ -260,7 +260,7 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 					}
 				}
 		         
-		       }.runTaskAsynchronously(plugin);
+		       }.runTaskAsynchronously(Crates.getInstance());
 			
 		}
 
