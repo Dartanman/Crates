@@ -1,5 +1,7 @@
 package me.dartanman.crates;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,10 +10,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.dartanman.crates.commands.CrateCmd;
 import me.dartanman.crates.crates.CrateManager;
+import me.dartanman.crates.database.DatabaseAndPlayerDataManager;
 import me.dartanman.crates.database.MySQLAndPlayerDataManager;
 import me.dartanman.crates.database.MySQLInfo;
 import me.dartanman.crates.events.ChatListener;
@@ -25,9 +31,12 @@ import me.dartanman.crates.events.JoinListener;
  */
 public class Crates extends JavaPlugin{
 	
+	private FileConfiguration playerDataFileConfig = new YamlConfiguration();
+	private File playerDataFile;
+	
 	private MySQLInfo mySQLInfo;
 	private CrateManager crateManager;
-	private MySQLAndPlayerDataManager mySQLManager;
+	private DatabaseAndPlayerDataManager databaseManager;
 	
 	/**
 	 * Stuff to run when plugin is enabled by the server.
@@ -35,23 +44,29 @@ public class Crates extends JavaPlugin{
 	public void onEnable() {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		if(connectToMySQL()) {
-			getLogger().info("Successfully connected to MySQL Server.");
-			mySQLManager = new MySQLAndPlayerDataManager(this);
-			if(mySQLManager.createCratesTable(mySQLInfo.getConnection())) {
-				crateManager = new CrateManager(this);
-				getCommand("crate").setExecutor(new CrateCmd(this));
-				getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
-				getServer().getPluginManager().registerEvents(new ChatListener(this), this);
-				getServer().getPluginManager().registerEvents(new InteractionListener(this), this);	
-				getServer().getPluginManager().registerEvents(new JoinListener(this), this);	
-				mySQLManager.attemptBeginNextDay();
+		String dataStorageChoice = getConfig().getString("DataStorage");
+		if(dataStorageChoice.equalsIgnoreCase("mysql")) {
+			if(connectToMySQL()) {
+				getLogger().info("Successfully connected to MySQL Server.");
+				databaseManager = new MySQLAndPlayerDataManager(this);
+				if(databaseManager.createCratesTable(mySQLInfo.getConnection())) {
+					crateManager = new CrateManager(this);
+					getCommand("crate").setExecutor(new CrateCmd(this));
+					getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
+					getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+					getServer().getPluginManager().registerEvents(new InteractionListener(this), this);	
+					getServer().getPluginManager().registerEvents(new JoinListener(this), this);	
+					databaseManager.attemptBeginNextDay();
+				}else {
+					getLogger().severe("Failed to create Crates table in MySQL server! Crates will not work!");
+				}
 			}else {
-				getLogger().severe("Failed to create Crates table in MySQL server! Crates will not work!");
-			}
-		}else {
-			getLogger().severe("SQL Authentication Failed!");
-			getLogger().severe("Crates will not work without a MySQL connection. Please make sure your settings are correct in config.yml");
+				getLogger().severe("SQL Authentication Failed!");
+				getLogger().severe("Crates will not work without either a) switching to YAML or b) providing proper MySQL credentials. Please make sure your settings are correct in config.yml");
+			}	
+		}else if(dataStorageChoice.equalsIgnoreCase("yaml")){
+			createFiles();
+			mySQLInfo = new MySQLInfo(null, "username", "password");
 		}
 	}
 	
@@ -91,8 +106,8 @@ public class Crates extends JavaPlugin{
 	 * @return
 	 *   MySQLAndPlayerDataManager object
 	 */
-	public MySQLAndPlayerDataManager getMySQLManager() {
-		return mySQLManager;
+	public DatabaseAndPlayerDataManager getMySQLManager() {
+		return databaseManager;
 	}
 	
 	/**
@@ -118,5 +133,40 @@ public class Crates extends JavaPlugin{
 			return false;
 		}
 	}
+	
+	public FileConfiguration getPlayerDataFile() {
+		return playerDataFileConfig;
+	}
+	
+	public void savePlayerDataFile(){
+        try {
+            playerDataFileConfig.save(playerDataFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            getLogger().severe("Failed to save playerData.yml!");
+        }
+    }
+	
+	private void createFiles() {
+        playerDataFile = new File(getDataFolder(), "playerData.yml");
+
+        saveRes(playerDataFile, "playerData.yml");
+ 
+
+        playerDataFileConfig = new YamlConfiguration();
+        try {
+            playerDataFileConfig.load(playerDataFile);
+        }catch(IOException | InvalidConfigurationException e) {
+        	e.printStackTrace();
+        }
+    }
+	
+    public void saveRes(File file, String name) {
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            saveResource(name, false);
+        }
+    }
+	
 
 }

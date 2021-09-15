@@ -18,7 +18,7 @@ import me.dartanman.crates.Crates;
  * MySQLAndPlayerDataManager - Manages everything to do with MySQL and Player Data as it relates to time and crates
  * @author Austin Dart (Dartanman)
  */
-public class MySQLAndPlayerDataManager {
+public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 	
 	private Crates plugin;
 	
@@ -28,71 +28,25 @@ public class MySQLAndPlayerDataManager {
 	 *   Main class
 	 */
 	public MySQLAndPlayerDataManager(Crates pl) {
-		plugin = pl;
-	}
-	
-	/**
-	 * Returns an integer array of today's day of the year and the year
-	 * @return
-	 *   Integer array of today's day of the year and the year
-	 */
-	public int[] getTodayWithYear() {
-		Date date = new Date();
-		Instant instant = date.toInstant();
-		LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
-		int[] dayAndYear = new int[2];
-		dayAndYear[0] = localDate.getDayOfYear();
-		dayAndYear[1] = localDate.getYear();
-		return dayAndYear;
-	}
-	
-	/**
-	 * Attempts to start the next day and reset everyone's daily crates. Does nothing if it is not yet the next day.
-	 */
-	public void attemptBeginNextDay() {
-		if(getTodayWithYear()[0] > getOldDayWithYear()[0]) {
-			resetCratesToday(plugin.getMySQLInfo().getConnection());
-			plugin.getConfig().set("Today", String.valueOf(getTodayWithYear()[0]) + "/" + String.valueOf(getTodayWithYear()[1]));
-		}else if(getTodayWithYear()[1] > getOldDayWithYear()[1]) {
-			resetCratesToday(plugin.getMySQLInfo().getConnection());
-			plugin.getConfig().set("Today", String.valueOf(getTodayWithYear()[0]) + "/" + String.valueOf(getTodayWithYear()[1]));
-		}
-		plugin.saveConfig();
-	}
-	
-	/**
-	 * Gets what is saved as the current day and year, however it might be outdated (yesterday [or older in some circumstances])
-	 * @return
-	 *   What is saved as the current day and year
-	 */
-	public int[] getOldDayWithYear() {
-		String oldDayStr = plugin.getConfig().getString("Today");
-		String[] split = oldDayStr.split("/");
-		String oldDay = split[0];
-		String oldYear = split[1];
-		int[] dayAndYear = new int[2];
-		dayAndYear[0] = Integer.valueOf(oldDay);
-		dayAndYear[1] = Integer.valueOf(oldYear);
-		return dayAndYear;
+		super(pl);
 	}
 	
 	/**
 	 * Creates the table in the MySQL server used for Crates
-	 * @param connection
-	 *   The MySQL Connection to use
-	 * @return
-	 *   True if successful, false if there is an error
+	 * 
+	 * @param connection The MySQL Connection to use
+	 * @return True if successful, false if there is an error
 	 */
+	@Override
 	public boolean createCratesTable(Connection connection) {
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(
-					"CREATE TABLE IF NOT EXISTS crates ("
-					+ "PlayerUUID VARCHAR(37) NOT NULL, "
-					+ "CratesOpenedToday INT NOT NULL, "
-					+ "LastOpenTime BIGINT NOT NULL, "
-					+ "PRIMARY KEY ( PlayerUUID )"
-					+ ");");
-			
+			PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS crates ("
+					+ "PlayerUUID VARCHAR(37) NOT NULL, " + 
+					"CratesOpenedToday INT NOT NULL, " + 
+					"LastOpenTime BIGINT NOT NULL, " + 
+					"PRIMARY KEY ( PlayerUUID )" + 
+					");");
+
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			return true;
@@ -102,15 +56,16 @@ public class MySQLAndPlayerDataManager {
 		}
 	}
 		
-	/**
-	 * Adds a player('s UUID) to the database
-	 * @param connection
-	 *   The MySQL Connection to use
-	 * @param playerUUID
-	 *   The player's UUID
-	 * @return
-	 *   True if successful, false if there is an error
-	 */
+		/**
+	 	* Adds a player('s UUID) to the database
+	 	* @param connection
+	 	*   The MySQL Connection to use
+	 	* @param playerUUID
+	 	*   The player's UUID
+	 	* @return
+	 	*   True if successful, false if there is an error
+	 	*/
+		@Override
 		public boolean addPlayerToDatabase(Connection connection, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
@@ -148,6 +103,7 @@ public class MySQLAndPlayerDataManager {
 		 * @return
 		 *   The amount of crates they've opened today. 0 if there is an error.
 		 */
+		@Override
 		public int getCratesToday(Connection connection, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
@@ -189,6 +145,7 @@ public class MySQLAndPlayerDataManager {
 		 * @return
 		 *   The last time, in millis, the player opened a crate
 		 */
+		@Override
 		public long getLastOpenTime(Connection connection, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
@@ -232,6 +189,7 @@ public class MySQLAndPlayerDataManager {
 		 * @return
 		 *   True if successful, false if there is an error
 		 */
+		@Override
 		public boolean setCratesToday(Connection connection, int cratesToday, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
@@ -257,6 +215,7 @@ public class MySQLAndPlayerDataManager {
 		 * @return
 		 *   True if successful, false if there is an error
 		 */
+		@Override
 		public boolean setLastOpenTime(Connection connection, long openTimeMillis, UUID playerUUID) {
 			try {
 				String uuidStr = playerUUID.toString();
@@ -278,6 +237,7 @@ public class MySQLAndPlayerDataManager {
 		 * @return
 		 *   True if successful, false if there is an error
 		 */
+		@Override
 		public boolean resetCratesToday(Connection connection) {
 			try {
 				PreparedStatement preparedStatement = connection.prepareStatement("UPDATE crates SET CratesOpenedToday='0'");
