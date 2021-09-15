@@ -1,4 +1,7 @@
-DataStorage: mysql
+# Crates by Dartanman
+# DataStorage options [yaml, mysql]
+# MySQL is recommended, as it is much faster and less resource-intensive than YAML!
+DataStorage: yaml
 MySQL:
   Address: 'localhost'
   Port: '3306'
