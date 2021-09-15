@@ -12,8 +12,8 @@ Configurable Settings:
   - Daily limit as to how many crates each player can open is configurable.
 
 Commands:
-  - /crate <create/edit/delete> <crate> - Creates, edits, or deletes <crate> after a confirmation GUI
-  - /crate give <player> <crate> <amount> - Gives <player> <amount> of <crate>
+  - /crate <create/edit/delete> <crate/name> - Creates, edits, or deletes <crate> after a confirmation GUI
+  - /crate give <player/name> <crate/name> <amount/of/crates> - Gives <player/name> <amount/of/crates> of <crate/name>
 
 Permissions:
   - crates.admin.create - Allows /crate create
