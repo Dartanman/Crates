@@ -1,5 +1,5 @@
 name: Crates
-version: 1.0.4
+version: ${project.version}
 author: Dartanman
 main: me.dartanman.crates.Crates
 commands:

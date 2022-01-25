@@ -67,7 +67,7 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 	 	*   The player's UUID
 	 	*/
 		@Override
-		public void addPlayerToDatabase(Connection connection, UUID playerUUID) {
+		public void addPlayerToDatabase(final Connection connection, final UUID playerUUID) {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -193,7 +193,7 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 		 *   The player's UUID
 		 */
 		@Override
-		public void setCratesToday(Connection connection, int cratesToday, UUID playerUUID) {
+		public void setCratesToday(final Connection connection, final int cratesToday, final UUID playerUUID) {
 			
 			new BukkitRunnable() {
 				@Override
@@ -221,7 +221,7 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 		 *   The player's UUID
 		 */
 		@Override
-		public void setLastOpenTime(Connection connection, long openTimeMillis, UUID playerUUID) {
+		public void setLastOpenTime(final Connection connection, final long openTimeMillis, final UUID playerUUID) {
 			
 			new BukkitRunnable() {
 				@Override
@@ -246,7 +246,7 @@ public class MySQLAndPlayerDataManager extends DatabaseAndPlayerDataManager{
 		 *   The MySQL Connection to use
 		 */
 		@Override
-		public void resetCratesToday(Connection connection) {
+		public void resetCratesToday(final Connection connection) {
 			
 			new BukkitRunnable() {
 				@Override
